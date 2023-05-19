@@ -69,6 +69,7 @@ def cli():
                         help="output format; TXT by default")
 
     args = parser.parse_args().__dict__
+    hf_token = args.pop("hf_token")
     model_name: str = args.pop("model")
     model_dir: str = args.pop("model_dir")
     output_dir: str = args.pop("output_dir")
@@ -100,7 +101,7 @@ def cli():
     if diarization:
         from pyannote.audio import Pipeline
         pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization",
-                                            use_auth_token="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")
+                                            use_auth_token=f"{hf_token}")
 
     for audio_path in args.pop("audio"):
         result = transcribe(model, audio_path, temperature=temperature,**args)
