@@ -11,7 +11,7 @@ setup(
     readme="README.md",
     python_requires=">=3.7",
     author="Ruiqing",
-    url="https://github.com/yinruiqing/pyannote-whisper",
+    url="https://github.com/antoine-briand/pyannote-whisper",
     license="MIT",
     packages=find_packages(exclude=["tests*"]),
     install_requires=[
