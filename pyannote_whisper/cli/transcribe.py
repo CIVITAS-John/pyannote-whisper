@@ -17,6 +17,7 @@ def cli():
     from whisper import available_models
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("--hf_token", type=str, help="Hugging Face Token to use pre-trained versions of pyannote/speaker-diarization")
     parser.add_argument("audio", nargs="+", type=str, help="audio file(s) to transcribe")
     parser.add_argument("--model", default="small", choices=available_models(), help="name of the Whisper model to use")
     parser.add_argument("--model_dir", type=str, default=None,
