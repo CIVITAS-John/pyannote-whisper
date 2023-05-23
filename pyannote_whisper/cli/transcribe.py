@@ -99,8 +99,8 @@ def cli():
 
     diarization = args.pop("diarization")
     if diarization:
-        from pyannote.audio import Model
-        pipeline = Model.from_pretrained("pyannote/speaker-diarization@2.1",
+        from pyannote.audio import Pipeline
+        pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
                                             use_auth_token=f"{hf_token}")
 
     for audio_path in args.pop("audio"):
