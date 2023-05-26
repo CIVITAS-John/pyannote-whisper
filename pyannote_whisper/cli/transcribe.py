@@ -1,4 +1,6 @@
 import argparse
+import requests
+import json
 import os
 import warnings
 from typing import Literal, cast
@@ -12,12 +14,19 @@ from whisper.utils import (WriteSRT, WriteTXT, WriteVTT, optional_float,
 
 from pyannote_whisper.utils import diarize_text, write_to_txt
 
+def send_slack_notification(webhook_url, audio: list):
+    message = f"Transcription finished for {audio}"
+    data = {'text': message}
+    response = requests.post(webhook_url, data=json.dumps(data), headers={'Content-Type': 'application/json'})
+    if response.status_code != 200:
+        raise ValueError('Request to slack returned an error %s, the response is:\n%s' % (response.status_code, response.text))
 
 def cli():
     from whisper import available_models
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--hf_token", type=str, help="Hugging Face Token to use pre-trained versions of pyannote/speaker-diarization")
+    parser.add_argument("--slack_webhook", type=str, help="Slack Token to use for sending messages", default=None)
     parser.add_argument("audio", nargs="+", type=str, help="audio file(s) to transcribe")
     parser.add_argument("--model", default="small", choices=available_models(), help="name of the Whisper model to use")
     parser.add_argument("--model_dir", type=str, default=None,
@@ -70,6 +79,9 @@ def cli():
 
     args = parser.parse_args().__dict__
     hf_token = args.pop("hf_token")
+    slack_webhook = ""
+    if "slack_webhook" in args:
+        slack_webhook = args.pop("slack_webhook")
     model_name: str = args.pop("model")
     model_dir: str = args.pop("model_dir")
     output_dir: str = args.pop("output_dir")
@@ -102,8 +114,8 @@ def cli():
         from pyannote.audio import Pipeline
         pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization",
                                             use_auth_token=f"{hf_token}")
-
-    for audio_path in args.pop("audio"):
+    audio = args.pop("audio")
+    for audio_path in audio:
         result = transcribe(model, audio_path, temperature=temperature,**args)
         audio_basename = os.path.basename(audio_path)
 
@@ -128,6 +140,11 @@ def cli():
             res = diarize_text(result, diarization_result)
             write_to_txt(res, filepath)
 
+    # Send slack notification when done
+    if slack_webhook != "":
+        send_slack_notification(slack_webhook, audio)
+
+ 
 
 if __name__ == '__main__':
     cli()
