@@ -2,5 +2,7 @@ numpy
 torch
 torchvision
 openai-whisper
-pyannote.audio
+git+https://github.com/hmmlearn/hmmlearn
+git+https://github.com/pyannote/pyannote-audio.git@develop
 sndfile
+setuptools==59.5.0
