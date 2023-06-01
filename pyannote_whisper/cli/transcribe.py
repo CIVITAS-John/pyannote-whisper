@@ -135,6 +135,9 @@ def cli():
                 WriteSRT(output_dir).write_result(result, file=file)
 
         if diarization:
+            if torch.cuda.is_available():
+              pipeline = pipeline.to(torch.device('cuda:0'))
+
             diarization_result = pipeline(audio_path)
             filepath = os.path.join(output_dir, audio_basename + "_spk.txt")
             res = diarize_text(result, diarization_result)
