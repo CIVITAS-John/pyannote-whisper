@@ -1,0 +1,1 @@
+python3 -m pyannote_whisper.cli.transcribe $1.ogg --model medium.en --language en --diarization True --output_format=TXT --hf_token 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

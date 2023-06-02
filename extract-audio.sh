@@ -1,0 +1,1 @@
+ffmpeg -i $1.mp4 -vn -c:a libvorbis $1.ogg

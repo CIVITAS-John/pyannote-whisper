@@ -63,5 +63,10 @@ def diarize_text(transcribe_res, diarization_result):
 def write_to_txt(spk_sent, file):
     with open(file, 'w') as fp:
         for seg, spk, sentence in spk_sent:
-            line = f'{seg.start:.2f} {seg.end:.2f} {spk} {sentence}\n'
+            line = f'[{format_time(seg.start)}-{format_time(seg.end)}] {spk}:{sentence}\n'
             fp.write(line)
+
+def format_time(seconds):
+    minutes = int(seconds // 60)
+    seconds = int(seconds % 60)
+    return f"{minutes:02d}:{seconds:02d}"
