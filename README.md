@@ -6,16 +6,18 @@ For more detailed documentation, look for the upstream repository. This reposito
 Throughout the process, we will be in the Windows Subsystem of Linux (WSL) version 2.
 * First, install WSL2 with [https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-11-with-gui-support](Ubuntu 22.04).
 * Then, enable CUDA on WSL2 following the [https://learn.microsoft.com/en-us/windows/ai/directml/gpu-cuda-in-wsl](link)
-* Then, run `sh ./setup-on-wsl.sh` to finish the setup on WSL (probably for Ubuntu as well).
+* Then, download and unzip the folder by running `wget https://github.com/CIVITAS-John/pyannote-whisper/archive/refs/heads/main.zip && unzip main.zip && cd pyannote-whisper-main`.
+* Then, enter the cloned folder, run `sh ./setup-on-wsl.sh` to finish the setup on WSL (probably for Ubuntu as well).
 * Now you should be all set!
 
 ### macOS
-* Run `sh ./setup-on-mac.sh`. You should be all set.
+* Download and unzip [https://github.com/CIVITAS-John/pyannote-whisper/archive/refs/heads/main.zip](this repository).
+* Enter the unzipped folder. Run `sh ./setup-on-mac.sh`. You should be all set.
 
 ## Convert your video to audio
 Open the terminal, run:
 `sh ./extract-audio.sh my_video`
-This will convert my_video.mp4 (Video) to my_video.ogg (Audio).
+This will convert my_video.mp4 (Video) to my_video.ogg (Audio) in th.
 
 ## Convert your audio to transcript with speaker labels
 Open the terminal, run:
