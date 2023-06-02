@@ -21,8 +21,8 @@ This will convert my_video.mp4 (Video) to my_video.ogg (Audio) in th.
 
 ## Convert your audio to transcript with speaker labels
 Open the terminal, run:
-`sh ./transcribe.sh PATH_TO_YOUR_MP4`
-This will transcribe my_video.ogg (Audio) to my_video_labeled.txt (Transcript with speaker and time labels) and my_video.txt (Plain transcript).
+`sh ./transcribe.sh PATH_TO_YOUR_MP4 {YOUR_HUGGINGFACE_TOKEN}`
+This will transcribe my_video.ogg (Audio) to my_video_labeled.txt (Transcript with speaker and time labels) and my_video.txt (Plain transcript). If you already know the number of speakers (e.g. in one-on-one interviews, 2), you can add the number at the end of the command.
 
 ## How to make the model faster
 By default, the `transcribe.sh` uses the `medium.en` model, which asks for 5GB of memory and works not really fast. If you are under resource or time constraints, try to change to `tiny.en` (1GB) or `base.en` (1GB). Note that there is also multilingual models, simply remove `.en` to `tiny`, `base`, `small`, `medium`, or `large`.
