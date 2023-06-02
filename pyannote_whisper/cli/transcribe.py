@@ -74,6 +74,8 @@ def cli():
                         help="number of threads used by torch for CPU inference; supercedes MKL_NUM_THREADS/OMP_NUM_THREADS")
     parser.add_argument("--diarization", type=str2bool, default=True,
                         help="whether to perform speaker diarization; True by default")
+    parser.add_argument("--num_speakers", type=optional_int, default=None,
+                        help="number of speakers if that is already known; None by default")
     parser.add_argument("--output_format", type=str, default="TXT", choices=['TXT', 'VTT', 'SRT'],
                         help="output format; TXT by default")
 
@@ -110,7 +112,8 @@ def cli():
     model = load_model(model_name, device=device, download_root=model_dir)
 
     diarization = args.pop("diarization")
-    
+    num_speakers = args.pop("num_speakers")
+
     audio_path = args.pop("audio")
     result = transcribe(model, audio_path, temperature=temperature,**args)
     audio_basename = os.path.basename(audio_path)
@@ -135,8 +138,12 @@ def cli():
 
     if diarization:
         from pyannote.audio import Pipeline
-        pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
-                                            use_auth_token=f"{hf_token}")
+        if num_speakers == None:
+            pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
+                                                use_auth_token=f"{hf_token}")
+        else:
+            pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
+                                                use_auth_token=f"{hf_token}", num_speakers=num_speakers)
         diarization_result = pipeline(audio_path)
         filepath = os.path.join(output_dir, audio_basename + "_labeled.txt")
         res = diarize_text(result, diarization_result)
@@ -144,7 +151,7 @@ def cli():
 
     # Send slack notification when done
     if slack_webhook != "":
-        send_slack_notification(slack_webhook, audio)
+        send_slack_notification(slack_webhook, audio_path)
 
  
 
