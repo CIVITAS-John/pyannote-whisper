@@ -138,13 +138,12 @@ def cli():
 
     if diarization:
         from pyannote.audio import Pipeline
+        pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
+                                            use_auth_token=f"{hf_token}")
         if num_speakers == None:
-            pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
-                                                use_auth_token=f"{hf_token}")
+            diarization_result = pipeline(audio_path)
         else:
-            pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
-                                                use_auth_token=f"{hf_token}", num_speakers=num_speakers)
-        diarization_result = pipeline(audio_path)
+            diarization_result = pipeline(audio_path, num_speakers=num_speakers)
         filepath = os.path.join(output_dir, audio_basename + "_labeled.txt")
         res = diarize_text(result, diarization_result)
         write_to_txt(res, filepath)
