@@ -71,4 +71,4 @@ def format_time(seconds):
     minutes = int(seconds // 60)
     seconds = int(seconds % 60)
     milliseconds = int((seconds - int(seconds)) * 1000)
-    return f"{minutes:02d}:{seconds:02d}:{milliseconds:03d}"
+    return f"{minutes:02d}:{seconds:02d}.{milliseconds:03d}"

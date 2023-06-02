@@ -140,10 +140,10 @@ def cli():
         from pyannote.audio import Pipeline
         pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
                                             use_auth_token=f"{hf_token}")
-        # if num_speakers == None:
-        #     diarization_result = pipeline(audio_path)
-        # else:
-        diarization_result = pipeline(audio_path, num_speakers=2)
+        if num_speakers == None:
+            diarization_result = pipeline(audio_path)
+        else:
+            diarization_result = pipeline(audio_path, num_speakers=num_speakers)
         filepath = os.path.join(output_dir, audio_basename + ".vtt")
         res = diarize_text(result, diarization_result)
         write_to_vtt(res, filepath)
