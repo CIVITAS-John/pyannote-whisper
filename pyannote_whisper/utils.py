@@ -60,13 +60,15 @@ def diarize_text(transcribe_res, diarization_result):
     return res_processed
 
 
-def write_to_txt(spk_sent, file):
+def write_to_vtt(spk_sent, file):
     with open(file, 'w') as fp:
+        fp.write("WEBVTT\n\n")
         for seg, spk, sentence in spk_sent:
-            line = f'[{format_time(seg.start)}-{format_time(seg.end)}] {spk}:{sentence}\n'
+            line = f'{format_time(seg.start)} -> {format_time(seg.end)}\n{spk}:{sentence}\n\n'
             fp.write(line)
 
 def format_time(seconds):
     minutes = int(seconds // 60)
     seconds = int(seconds % 60)
-    return f"{minutes:02d}:{seconds:02d}"
+    milliseconds = int((seconds - int(seconds)) * 1000)
+    return f"{minutes:02d}:{seconds:02d}:{milliseconds:03d}"

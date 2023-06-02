@@ -12,7 +12,7 @@ from whisper.transcribe import transcribe
 from whisper.utils import (WriteSRT, WriteTXT, WriteVTT, optional_float,
                            optional_int, str2bool)
 
-from pyannote_whisper.utils import diarize_text, write_to_txt
+from pyannote_whisper.utils import diarize_text, write_to_vtt
 
 def send_slack_notification(webhook_url, audio: list):
     message = f"Transcription finished for {audio}"
@@ -140,13 +140,13 @@ def cli():
         from pyannote.audio import Pipeline
         pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
                                             use_auth_token=f"{hf_token}")
-        if num_speakers == None:
-            diarization_result = pipeline(audio_path)
-        else:
-            diarization_result = pipeline(audio_path, num_speakers=num_speakers)
-        filepath = os.path.join(output_dir, audio_basename + "_labeled.txt")
+        # if num_speakers == None:
+        #     diarization_result = pipeline(audio_path)
+        # else:
+        diarization_result = pipeline(audio_path, num_speakers=2)
+        filepath = os.path.join(output_dir, audio_basename + ".vtt")
         res = diarize_text(result, diarization_result)
-        write_to_txt(res, filepath)
+        write_to_vtt(res, filepath)
 
     # Send slack notification when done
     if slack_webhook != "":

@@ -20,12 +20,12 @@ Throughout the process, we will be in the Windows Subsystem of Linux (WSL) versi
 ## Convert your video to audio
 Open the terminal, run:
 `sh ./extract-audio.sh my_video`
-This will convert my_video.mp4 (Video) to my_video.ogg (Audio) in th.
+This will convert `my_video.mp4` (Video) to `my_video.ogg` (Audio) in the working folder.
 
 ## Convert your audio to transcript with speaker labels
 Open the terminal, run:
 `sh ./transcribe.sh PATH_TO_YOUR_MP4 {YOUR_HUGGINGFACE_TOKEN}`
-This will transcribe my_video.ogg (Audio) to my_video_labeled.txt (Transcript with speaker and time labels) and my_video.txt (Plain transcript). If you already know the number of speakers (e.g. in one-on-one interviews, 2), you can add the number at the end of the command. For example:
+This will transcribe `my_video.ogg` (Audio) to `my_video.vtt` (Transcript with speaker and time labels) and my_video.txt (Plain transcript). If you already know the number of speakers (e.g. in one-on-one interviews, 2), you can add the number at the end of the command. For example:
 `sh ./transcribe.sh PATH_TO_YOUR_MP4 {YOUR_HUGGINGFACE_TOKEN} 2`
 
 ## How to make the model faster
