@@ -148,7 +148,10 @@ def cli():
         else:
             diarization_result = pipeline(audio_path, num_speakers=num_speakers)
         filepath = os.path.join(output_dir, audio_basename + ".vtt")
-        res = diarize_text(result.to_dict(), diarization_result)
+        
+        word_segments = result.all_words()
+
+        res = diarize_text(word_segments, diarization_result)
         write_to_vtt(res, filepath)
 
     # Send slack notification when done
