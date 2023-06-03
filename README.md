@@ -31,9 +31,9 @@ This will transcribe `my_video.ogg` (Audio) to `my_video.vtt` (Transcript with s
 ## How to make the model faster
 By default, the `transcribe.sh` uses the `medium.en` model, which asks for 5GB of memory and works not really fast. If you are under resource or time constraints, try to change to `tiny.en` (1GB) or `base.en` (1GB). Note that there is also multilingual models, simply remove `.en` to `tiny`, `base`, `small`, `medium`, or `large`.
 
-## Credits
-For academic researchers:
-* Please acknowledge the author of the helper script (@CIVITAS-John).
-* Please cite the following models:
+## Acknowledgement
+Academic researchers, lease cite the following models:
 1. [Whisper](https://github.com/openai/whisper): Radford, A., Kim, J. W., Xu, T., Brockman, G., McLeavey, C., & Sutskever, I. (2022). Robust speech recognition via large-scale weak supervision. arXiv preprint arXiv:2212.04356.
 1. [pyannote](https://huggingface.co/pyannote/speaker-diarization): Bredin, H., Yin, R., Coria, J. M., Gelly, G., Korshunov, P., Lavechin, M., ... & Gill, M. P. (2020, May). Pyannote. audio: neural building blocks for speaker diarization. In ICASSP 2020-2020 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (pp. 7124-7128). IEEE.
+1. [stable-ts](https://github.com/jianfch/stable-ts).
+1. This automation script. 
