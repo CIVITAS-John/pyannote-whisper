@@ -5,5 +5,4 @@ torchaudio
 openai-whisper
 hmmlearn @ git+https://github.com/hmmlearn/hmmlearn
 pyannote.audio @ https://github.com/pyannote/pyannote-audio/archive/refs/heads/develop.zip
-sndfile
 setuptools==59.5.0
