@@ -12,6 +12,8 @@ from whisper.transcribe import transcribe
 from whisper.utils import (WriteSRT, WriteTXT, WriteVTT, optional_float,
                            optional_int, str2bool)
 
+import stable_whisper
+
 from pyannote_whisper.utils import diarize_text, write_to_vtt
 
 def send_slack_notification(webhook_url, audio: list):
@@ -108,30 +110,31 @@ def cli():
     if threads > 0:
         torch.set_num_threads(threads)
 
-    from whisper import load_model
-    model = load_model(model_name, device=device, download_root=model_dir)
+    # from whisper import load_model
+    # model = load_model(model_name, device=device, download_root=model_dir)
+
+    model = stable_whisper.load_model(model_name)
 
     diarization = args.pop("diarization")
     num_speakers = args.pop("num_speakers")
 
     audio_path = args.pop("audio")
-    result = transcribe(model, audio_path, temperature=temperature,**args)
+    result = model.transcribe(audio_path, temperature=temperature, vad=True, **args)
+    # result = transcribe(model, audio_path, temperature=temperature, **args)
     audio_basename = os.path.basename(audio_path)
 
-    if output_format == "TXT":
-        # save TXT
-        with open(os.path.join(output_dir, audio_basename + ".txt"), "w", encoding="utf-8") as file:
-            WriteTXT(output_dir).write_result(result, file=file, options={})
+    result.save_as_json(os.path.join(output_dir, audio_basename + '_raw.json'))
+    if output_format == "TSV":
+        # save TSV
+        result.to_tsv(os.path.join(output_dir, audio_basename + '_raw.tsv'), word_level=False)
 
     elif output_format == "VTT":
         # save VTT
-        with open(os.path.join(output_dir, audio_basename + ".vtt"), "w", encoding="utf-8") as file:
-            WriteVTT(output_dir).write_result(result, file=file, options={})
+        result.to_srt_vtt(os.path.join(output_dir, audio_basename + '_raw.vtt'), word_level=False)
 
     elif output_format == "SRT":
         # save SRT
-        with open(os.path.join(output_dir, audio_basename + ".srt"), "w", encoding="utf-8") as file:
-            WriteSRT(output_dir).write_result(result, file=file, options={})
+        result.to_srt_vtt(os.path.join(output_dir, audio_basename + '_raw.srt'), word_level=False)
 
     del model
     torch.cuda.empty_cache()
@@ -145,7 +148,7 @@ def cli():
         else:
             diarization_result = pipeline(audio_path, num_speakers=num_speakers)
         filepath = os.path.join(output_dir, audio_basename + ".vtt")
-        res = diarize_text(result, diarization_result)
+        res = diarize_text(result.to_dict(), diarization_result)
         write_to_vtt(res, filepath)
 
     # Send slack notification when done
