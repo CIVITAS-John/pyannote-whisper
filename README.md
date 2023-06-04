@@ -4,6 +4,7 @@ For more detailed documentation, look for the upstream repository. This reposito
 ## Setup everything
 * You need to first register a Huggingface account.
 * Then, generate a [Huggingface Token](https://huggingface.co/settings/tokens). Click `New token` and set the role to `Read`.
+* Then, fill in the forms [here](https://huggingface.co/pyannote/segmentation) and [here](https://huggingface.co/pyannote/speaker-diarization).
 
 ### Windows
 Throughout the process, we will be in the Windows Subsystem of Linux (WSL) version 2.
