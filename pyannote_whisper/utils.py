@@ -4,9 +4,9 @@ from pyannote.core import Segment, Annotation, Timeline
 def get_text_with_timestamp(transcribe_res):
     timestamp_texts = []
     for item in transcribe_res:
-        start = item['start']
-        end = item['end']
-        text = item['word']
+        start = item.start
+        end = item.end
+        text = item.word
         timestamp_texts.append((Segment(start, end), text))
     return timestamp_texts
 
@@ -64,11 +64,13 @@ def write_to_vtt(spk_sent, file):
     with open(file, 'w') as fp:
         fp.write("WEBVTT\n\n")
         for seg, spk, sentence in spk_sent:
-            line = f'{format_time(seg.start)} -> {format_time(seg.end)}\n{spk}:{sentence}\n\n'
+            line = f'{format_time(seg.start)} --> {format_time(seg.end)}\n{spk}:{sentence}\n\n'
             fp.write(line)
 
 def format_time(seconds):
     milliseconds = int((seconds - int(seconds)) * 1000)
     minutes = int(seconds // 60)
+    hours = int(minutes // 60)
+    minutes = int(minutes % 60)
     seconds = int(seconds % 60)
-    return f"{minutes:02d}:{seconds:02d}.{milliseconds:03d}"
+    return f"{hours:02d}:{minutes:02d}:{seconds:02d}.{milliseconds:03d}"

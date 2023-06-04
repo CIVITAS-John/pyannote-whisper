@@ -119,11 +119,12 @@ def cli():
     num_speakers = args.pop("num_speakers")
 
     audio_path = args.pop("audio")
-    result = model.transcribe(audio_path, temperature=temperature, vad=True, **args)
+    language = args.pop("language")
+    result = model.transcribe(audio_path, temperature=temperature, **args)
     # result = transcribe(model, audio_path, temperature=temperature, **args)
-    audio_basename = os.path.basename(audio_path)
+    audio_basename = os.path.splitext(os.path.basename(audio_path))[0]
 
-    result.save_as_json(os.path.join(output_dir, audio_basename + '_raw.json'))
+    # result.save_as_json(os.path.join(output_dir, audio_basename + '_raw.json'))
     if output_format == "TSV":
         # save TSV
         result.to_tsv(os.path.join(output_dir, audio_basename + '_raw.tsv'), word_level=False)
